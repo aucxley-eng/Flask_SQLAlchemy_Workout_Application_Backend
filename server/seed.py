@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-from app import app
-from models import db, Exercise, Workout, WorkoutExercise
+from app import create_app
+from app.models import db, Exercise, Workout, WorkoutExercise
 from datetime import date
+
+app = create_app()
 
 with app.app_context():
     print("Clearing database...")

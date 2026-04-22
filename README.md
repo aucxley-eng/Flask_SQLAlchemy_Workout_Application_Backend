@@ -1,35 +1,30 @@
 # Flask SQLAlchemy Workout Application Backend
 
-This project is a complete backend API for a workout tracking application used by personal trainers. It allows for tracking workouts and their associated exercises, including sets, reps, and duration for each exercise within a workout.
+This is a modular backend API for a workout tracking application, built with Flask, SQLAlchemy, and Marshmallow.
 
 ## Features
-
-- **Workouts Management**: Create, view, and delete workouts.
-- **Exercises Management**: Create, view, and delete exercises.
-- **Exercise Tracking**: Add exercises to workouts with specific metrics (reps, sets, duration).
-- **Validations**: Robust validations at the database level (Table Constraints), model level (SQLAlchemy @validates), and API level (Marshmallow Schema validations).
-- **Serialization**: Efficient serialization and deserialization using Marshmallow, including complex relationships.
-
-## Built With
-
-- **Flask**: A lightweight WSGI web application framework.
-- **Flask-SQLAlchemy**: SQLAlchemy support for Flask.
-- **Flask-Migrate**: SQLAlchemy database migrations for Flask.
-- **Marshmallow**: A library for converting complex data types to and from native Python data types.
+- **Workouts**: Track workout sessions with dates and notes.
+- **Exercises**: Reusable exercise database.
+- **Workout Exercises**: Join table to track specific sets, reps, and duration for each exercise in a workout.
+- **Validations**: Triple-layer validation (Database, Model, and Schema).
+- **Modular Structure**: Organized using the App Factory and Blueprint patterns.
 
 ## Installation
 
 1. Clone the repository.
-2. Ensure you have Python 3.8+ installed.
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    pipenv install
+   ```
+3. Enter the virtual environment:
+   ```bash
+   pipenv shell
    ```
 4. Navigate to the `server` directory:
    ```bash
    cd server
    ```
-5. Run database migrations:
+5. Initialize and run migrations (if starting fresh):
    ```bash
    flask db upgrade
    ```
@@ -39,10 +34,9 @@ This project is a complete backend API for a workout tracking application used b
    ```
 
 ## Running the Application
-
-To start the Flask development server:
+To start the development server:
 ```bash
-python app.py
+python run.py
 ```
 The server will run on `http://localhost:5555`.
 
@@ -50,37 +44,21 @@ The server will run on `http://localhost:5555`.
 
 ### Workouts
 - `GET /workouts`: List all workouts.
-- `GET /workouts/<id>`: Show a single workout with its associated exercises (includes reps, sets, and duration).
+- `GET /workouts/<id>`: Show a single workout with its associated exercises.
 - `POST /workouts`: Create a new workout.
-- `DELETE /workouts/<id>`: Delete a workout and its associated exercise mappings.
+- `DELETE /workouts/<id>`: Delete a workout and its associated exercises.
 
 ### Exercises
 - `GET /exercises`: List all exercises.
-- `GET /exercises/<id>`: Show a single exercise and its associated workouts.
+- `GET /exercises/<id>`: Show an exercise and its history in different workouts.
 - `POST /exercises`: Create a new exercise.
-- `DELETE /exercises/<id>`: Delete an exercise and its associated workout mappings.
+- `DELETE /exercises/<id>`: Delete an exercise.
 
-### Workout Exercises (Join Table)
-- `POST /workouts/<workout_id>/exercises/<exercise_id>/workout_exercises`: Add an exercise to a workout with specific reps, sets, and duration.
+### Workout Exercises (The Join)
+- `POST /workouts/<workout_id>/exercises/<exercise_id>/workout_exercises`: Add an exercise to a specific workout with `reps`, `sets`, and `duration_seconds`.
 
-## Database Schema
-
-### Exercise
-- `id` (Integer, Primary Key)
-- `name` (String, Required)
-- `category` (String, Required)
-- `equipment_needed` (Boolean)
-
-### Workout
-- `id` (Integer, Primary Key)
-- `date` (Date, Required)
-- `duration_minutes` (Integer, Required)
-- `notes` (Text)
-
-### WorkoutExercise
-- `id` (Integer, Primary Key)
-- `workout_id` (Integer, Foreign Key to Workout)
-- `exercise_id` (Integer, Foreign Key to Exercise)
-- `reps` (Integer)
-- `sets` (Integer)
-- `duration_seconds` (Integer)
+## Tech Stack
+- **Flask**: Framework
+- **SQLAlchemy**: ORM
+- **Marshmallow**: Serialization & Validation
+- **Flask-Migrate**: Migrations
